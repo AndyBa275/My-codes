@@ -1,0 +1,27 @@
+import camelot
+import pandas as pd
+import os
+
+# Define the path to the PDF file
+pdf_path = os.path.join(os.path.expanduser('~'), 'Desktop', 'STATEMENT.pdf')
+
+# Extract tables from the PDF using Camelot
+tables = camelot.read_pdf(pdf_path, flavor='stream', pages='all')
+
+# Check if tables were found
+if not tables:
+    print("No tables found in the PDF.")
+else:
+    print(f"Total tables extracted: {len(tables)}")
+
+    # Combine all tables into a single DataFrame
+    df = pd.concat([table.df for table in tables])
+
+    # Define the path to save the Excel file
+    excel_path = os.path.join(os.path.expanduser('~'), 'Desktop', 'STATEMENT.xlsx')
+
+    # Save the DataFrame to an Excel file
+    df.to_excel(excel_path, index=False)
+
+    print(f"Excel file saved to {excel_path}")
+    
